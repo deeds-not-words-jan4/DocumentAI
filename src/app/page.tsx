@@ -9,7 +9,13 @@ export default function Home() {
           自分のレシピ集から献立をカレンダーで選択できるアプリケーション
         </p>
         <div className="space-y-4">
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 justify-center flex-wrap">
+            <Link
+              href="/calendar"
+              className="px-8 py-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-lg font-semibold"
+            >
+              献立カレンダー
+            </Link>
             <Link
               href="/recipes"
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

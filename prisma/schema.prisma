@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// レシピテーブル
+model Recipe {
+  id          String   @id @default(cuid())
+  name        String   // 料理名
+  category    String   // カテゴリ（和食/洋食/中華/その他）
+  ingredients String   // 材料リスト（JSON文字列として保存）
+  steps       String   // 調理手順（JSON文字列として保存）
+  cookingTime Int?     // 調理時間（分）
+  servings    Int?     // 人数分
+  imageUrl    String?  // 写真URL
+  tags        String?  // タグ（カンマ区切りの文字列）
+  memo        String?  // メモ
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // リレーション
+  menus       Menu[]
+
+  @@index([category])
+  @@index([createdAt])
+}
+
+// 献立テーブル
+model Menu {
+  id        String   @id @default(cuid())
+  recipeId  String   // レシピID（外部キー）
+  date      DateTime // 献立の日付
+  createdAt DateTime @default(now())
+
+  // リレーション
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([date])
+  @@index([recipeId])
+  @@unique([date]) // 1日1つの献立のみ
+}

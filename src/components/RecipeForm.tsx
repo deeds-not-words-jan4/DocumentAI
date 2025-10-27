@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { RecipeFormData, Ingredient, Step, CATEGORIES } from '@/types/recipe'
+import ImageUpload from './ImageUpload'
 
 type RecipeFormProps = {
   initialData?: RecipeFormData
@@ -256,17 +257,16 @@ export default function RecipeForm({
         </div>
       </div>
 
-      {/* 画像URL */}
+      {/* 画像アップロード */}
       <div>
-        <label htmlFor="imageUrl" className="block text-sm font-medium mb-2">
-          画像URL
+        <label className="block text-sm font-medium mb-2">
+          レシピ画像
         </label>
-        <input
-          id="imageUrl"
-          type="url"
-          value={formData.imageUrl || ''}
-          onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        <ImageUpload
+          currentImageUrl={formData.imageUrl}
+          onImageUploaded={(imageUrl) =>
+            setFormData({ ...formData, imageUrl })
+          }
         />
       </div>
 

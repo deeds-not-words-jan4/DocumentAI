@@ -8,8 +8,39 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category')
     const sortBy = searchParams.get('sortBy') || 'createdAt'
     const order = searchParams.get('order') || 'desc'
+    const search = searchParams.get('search')
+    const searchType = searchParams.get('searchType') || 'name'
 
-    const where = category ? { category } : {}
+    const where: any = {}
+
+    // カテゴリフィルター
+    if (category) {
+      where.category = category
+    }
+
+    // 検索機能
+    if (search) {
+      switch (searchType) {
+        case 'name':
+          // 料理名で検索
+          where.name = {
+            contains: search,
+          }
+          break
+        case 'tags':
+          // タグで検索
+          where.tags = {
+            contains: search,
+          }
+          break
+        case 'ingredients':
+          // 材料で検索（JSON文字列内を検索）
+          where.ingredients = {
+            contains: search,
+          }
+          break
+      }
+    }
 
     const recipes = await prisma.recipe.findMany({
       where,

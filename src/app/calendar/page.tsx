@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import MonthCalendar from '@/components/MonthCalendar'
+import WeekCalendar from '@/components/WeekCalendar'
 import MenuDialog from '@/components/MenuDialog'
 import MenuEditDialog from '@/components/MenuEditDialog'
 import { Menu } from '@/types/menu'
@@ -13,6 +14,7 @@ export default function CalendarPage() {
   const [menus, setMenus] = useState<Menu[]>([])
   const [recipes, setRecipes] = useState<Recipe[]>([])
   const [loading, setLoading] = useState(true)
+  const [viewMode, setViewMode] = useState<'month' | 'week'>('month')
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
@@ -63,6 +65,18 @@ export default function CalendarPage() {
 
   const handleNextMonth = () => {
     setCurrentDate(new Date(year, month, 1))
+  }
+
+  const handlePrevWeek = () => {
+    const newDate = new Date(currentDate)
+    newDate.setDate(newDate.getDate() - 7)
+    setCurrentDate(newDate)
+  }
+
+  const handleNextWeek = () => {
+    const newDate = new Date(currentDate)
+    newDate.setDate(newDate.getDate() + 7)
+    setCurrentDate(newDate)
   }
 
   const handleDateClick = (date: Date) => {
@@ -174,34 +188,69 @@ export default function CalendarPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">献立カレンダー</h1>
-          <div className="flex gap-4">
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-6 md:py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
+          <h1 className="text-2xl sm:text-3xl font-bold">献立カレンダー</h1>
+          <div className="flex gap-2 sm:gap-4 w-full sm:w-auto">
             <Link
               href="/recipes"
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+              className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 text-center text-sm sm:text-base touch-manipulation"
             >
               レシピ一覧
             </Link>
             <Link
               href="/"
-              className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+              className="flex-1 sm:flex-none px-3 sm:px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-center text-sm sm:text-base touch-manipulation"
             >
-              ホームに戻る
+              ホーム
             </Link>
           </div>
         </div>
 
-        <MonthCalendar
-          year={year}
-          month={month}
-          menus={menus}
-          onDateClick={handleDateClick}
-          onPrevMonth={handlePrevMonth}
-          onNextMonth={handleNextMonth}
-        />
+        {/* View Mode Toggle */}
+        <div className="mb-4 flex justify-center gap-2">
+          <button
+            onClick={() => setViewMode('month')}
+            className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-md text-sm sm:text-base touch-manipulation ${
+              viewMode === 'month'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            月表示
+          </button>
+          <button
+            onClick={() => setViewMode('week')}
+            className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-md text-sm sm:text-base touch-manipulation ${
+              viewMode === 'week'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            週表示
+          </button>
+        </div>
+
+        {/* Calendar Display */}
+        {viewMode === 'month' ? (
+          <MonthCalendar
+            year={year}
+            month={month}
+            menus={menus}
+            onDateClick={handleDateClick}
+            onPrevMonth={handlePrevMonth}
+            onNextMonth={handleNextMonth}
+          />
+        ) : (
+          <WeekCalendar
+            currentDate={currentDate}
+            menus={menus}
+            onDateClick={handleDateClick}
+            onPrevWeek={handlePrevWeek}
+            onNextWeek={handleNextWeek}
+          />
+        )}
 
         {/* 献立登録ダイアログ */}
         <MenuDialog
@@ -217,20 +266,20 @@ export default function CalendarPage() {
 
         {/* 献立詳細モーダル */}
         {selectedMenu && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-xl p-6 max-w-2xl w-full mx-4">
-              <h2 className="text-2xl font-bold mb-4">献立詳細</h2>
-              <p className="text-gray-600 mb-6">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-xl p-4 sm:p-6 max-w-2xl w-full max-h-[90vh] sm:max-h-auto overflow-y-auto">
+              <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">献立詳細</h2>
+              <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
                 {new Date(selectedMenu.date).getFullYear()}年
                 {new Date(selectedMenu.date).getMonth() + 1}月
                 {new Date(selectedMenu.date).getDate()}日
               </p>
 
-              <div className="mb-6">
-                <h3 className="text-xl font-semibold mb-2">
+              <div className="mb-4 sm:mb-6">
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">
                   {selectedMenu.recipe.name}
                 </h3>
-                <div className="flex gap-2 text-sm text-gray-600 mb-4">
+                <div className="flex gap-2 text-xs sm:text-sm text-gray-600 mb-4 flex-wrap">
                   <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">
                     {selectedMenu.recipe.category}
                   </span>
@@ -243,16 +292,16 @@ export default function CalendarPage() {
                 </div>
                 <Link
                   href={`/recipes/${selectedMenu.recipe.id}`}
-                  className="text-blue-600 hover:text-blue-700 text-sm"
+                  className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm"
                 >
                   レシピの詳細を見る →
                 </Link>
               </div>
 
-              <div className="flex gap-4 justify-end">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-end">
                 <button
                   onClick={handleDeleteMenu}
-                  className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                  className="px-4 sm:px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm sm:text-base touch-manipulation order-3 sm:order-1"
                 >
                   削除
                 </button>
@@ -260,7 +309,7 @@ export default function CalendarPage() {
                   onClick={() => {
                     setIsEditDialogOpen(true)
                   }}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  className="px-4 sm:px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm sm:text-base touch-manipulation order-2"
                 >
                   編集
                 </button>
@@ -269,7 +318,7 @@ export default function CalendarPage() {
                     setSelectedMenu(null)
                     setSelectedDate(null)
                   }}
-                  className="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+                  className="px-4 sm:px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm sm:text-base touch-manipulation order-1 sm:order-3"
                 >
                   閉じる
                 </button>

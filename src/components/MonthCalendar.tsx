@@ -81,32 +81,32 @@ export default function MonthCalendar({
   const weekDays = ['日', '月', '火', '水', '木', '金', '土']
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 md:p-6">
       {/* ヘッダー */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <button
           onClick={onPrevMonth}
-          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
+          className="px-3 sm:px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md text-sm sm:text-base touch-manipulation"
         >
           前月
         </button>
-        <h2 className="text-2xl font-bold">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold">
           {year}年 {month}月
         </h2>
         <button
           onClick={onNextMonth}
-          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
+          className="px-3 sm:px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md text-sm sm:text-base touch-manipulation"
         >
           次月
         </button>
       </div>
 
       {/* 曜日ヘッダー */}
-      <div className="grid grid-cols-7 gap-2 mb-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2">
         {weekDays.map((day, index) => (
           <div
             key={index}
-            className={`text-center font-semibold py-2 ${
+            className={`text-center font-semibold py-1 sm:py-2 text-xs sm:text-sm ${
               index === 0 ? 'text-red-600' : index === 6 ? 'text-blue-600' : ''
             }`}
           >
@@ -116,7 +116,7 @@ export default function MonthCalendar({
       </div>
 
       {/* カレンダーグリッド */}
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2">
         {calendarDays.map((date, index) => {
           const menu = getMenuForDate(date)
           const isCurrent = isCurrentMonth(date)
@@ -127,15 +127,15 @@ export default function MonthCalendar({
               key={index}
               onClick={() => onDateClick(date)}
               className={`
-                min-h-[120px] p-2 border rounded-md text-left
-                hover:bg-blue-50 transition-colors
+                min-h-[80px] sm:min-h-[100px] md:min-h-[120px] p-1 sm:p-2 border rounded-md text-left
+                hover:bg-blue-50 transition-colors touch-manipulation
                 ${!isCurrent ? 'bg-gray-50 text-gray-400' : ''}
                 ${today ? 'border-blue-500 border-2' : 'border-gray-300'}
                 ${menu ? 'bg-green-50' : ''}
               `}
             >
               <div
-                className={`text-sm font-semibold mb-1 ${
+                className={`text-xs sm:text-sm font-semibold mb-1 ${
                   index % 7 === 0
                     ? 'text-red-600'
                     : index % 7 === 6
@@ -151,10 +151,10 @@ export default function MonthCalendar({
                     <img
                       src={menu.recipe.imageUrl}
                       alt={menu.recipe.name}
-                      className="w-full h-16 object-cover rounded"
+                      className="w-full h-10 sm:h-12 md:h-16 object-cover rounded"
                     />
                   )}
-                  <div className="font-medium text-green-800 truncate">
+                  <div className="font-medium text-green-800 truncate text-[10px] sm:text-xs">
                     {menu.recipe.name}
                   </div>
                 </div>

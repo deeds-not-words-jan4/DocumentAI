@@ -127,7 +127,7 @@ export default function MonthCalendar({
               key={index}
               onClick={() => onDateClick(date)}
               className={`
-                min-h-[100px] p-2 border rounded-md text-left
+                min-h-[120px] p-2 border rounded-md text-left
                 hover:bg-blue-50 transition-colors
                 ${!isCurrent ? 'bg-gray-50 text-gray-400' : ''}
                 ${today ? 'border-blue-500 border-2' : 'border-gray-300'}
@@ -146,7 +146,14 @@ export default function MonthCalendar({
                 {date.getDate()}
               </div>
               {menu && (
-                <div className="text-xs">
+                <div className="text-xs space-y-1">
+                  {menu.recipe.imageUrl && (
+                    <img
+                      src={menu.recipe.imageUrl}
+                      alt={menu.recipe.name}
+                      className="w-full h-12 object-cover rounded"
+                    />
+                  )}
                   <div className="font-medium text-green-800 truncate">
                     {menu.recipe.name}
                   </div>

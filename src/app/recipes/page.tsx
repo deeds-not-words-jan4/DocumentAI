@@ -52,12 +52,20 @@ export default function RecipesPage() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">レシピ一覧</h1>
-          <Link
-            href="/recipes/new"
-            className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            新規登録
-          </Link>
+          <div className="flex gap-4">
+            <Link
+              href="/"
+              className="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+            >
+              ホームに戻る
+            </Link>
+            <Link
+              href="/recipes/new"
+              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              新規登録
+            </Link>
+          </div>
         </div>
 
         {/* フィルター・ソート */}

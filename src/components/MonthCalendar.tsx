@@ -151,14 +151,11 @@ export default function MonthCalendar({
                     <img
                       src={menu.recipe.imageUrl}
                       alt={menu.recipe.name}
-                      className="w-full h-12 object-cover rounded"
+                      className="w-full h-16 object-cover rounded"
                     />
                   )}
                   <div className="font-medium text-green-800 truncate">
                     {menu.recipe.name}
-                  </div>
-                  <div className="text-gray-600 text-[10px]">
-                    {menu.recipe.category}
                   </div>
                 </div>
               )}

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import MonthCalendar from '@/components/MonthCalendar'
 import MenuDialog from '@/components/MenuDialog'
+import MenuEditDialog from '@/components/MenuEditDialog'
 import { Menu } from '@/types/menu'
 import { Recipe } from '@/types/recipe'
 import Link from 'next/link'
@@ -13,6 +14,7 @@ export default function CalendarPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([])
   const [loading, setLoading] = useState(true)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null)
 
@@ -105,6 +107,34 @@ export default function CalendarPage() {
       fetchData() // データを再取得
     } catch (error: any) {
       console.error('Error creating menu:', error)
+      alert(error.message || 'エラーが発生しました')
+    }
+  }
+
+  const handleMenuEdit = async (menuId: string, recipeId: string, date: Date) => {
+    try {
+      const response = await fetch(`/api/menus/${menuId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipeId,
+          date: date.toISOString(),
+        }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || '献立の更新に失敗しました')
+      }
+
+      alert('献立を更新しました')
+      setSelectedMenu(null)
+      setSelectedDate(null)
+      fetchData() // データを再取得
+    } catch (error: any) {
+      console.error('Error updating menu:', error)
       alert(error.message || 'エラーが発生しました')
     }
   }
@@ -228,6 +258,14 @@ export default function CalendarPage() {
                 </button>
                 <button
                   onClick={() => {
+                    setIsEditDialogOpen(true)
+                  }}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                  編集
+                </button>
+                <button
+                  onClick={() => {
                     setSelectedMenu(null)
                     setSelectedDate(null)
                   }}
@@ -239,6 +277,15 @@ export default function CalendarPage() {
             </div>
           </div>
         )}
+
+        {/* 献立編集ダイアログ */}
+        <MenuEditDialog
+          isOpen={isEditDialogOpen}
+          menu={selectedMenu}
+          recipes={recipes}
+          onClose={() => setIsEditDialogOpen(false)}
+          onSubmit={handleMenuEdit}
+        />
       </div>
     </div>
   )

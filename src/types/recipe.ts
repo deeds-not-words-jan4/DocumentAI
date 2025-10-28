@@ -40,4 +40,5 @@ export const CATEGORIES = [
   '洋食',
   '中華',
   'その他',
+  'タレ',
 ] as const

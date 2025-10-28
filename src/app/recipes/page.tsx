@@ -148,6 +148,7 @@ export default function RecipesPage() {
                 <option value="洋食">洋食</option>
                 <option value="中華">中華</option>
                 <option value="その他">その他</option>
+                <option value="タレ">タレ</option>
               </select>
             </div>
             <div>

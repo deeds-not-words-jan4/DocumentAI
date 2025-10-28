@@ -66,7 +66,7 @@ export default function MenuDialog({
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-2 sm:gap-3 max-h-60 sm:max-h-96 overflow-y-auto">
-                {recipes.map((recipe) => (
+                {recipes.filter((recipe) => recipe.category !== 'タレ').map((recipe) => (
                   <label
                     key={recipe.id}
                     className={`

@@ -145,19 +145,12 @@ export default function MonthCalendar({
               >
                 {date.getDate()}
               </div>
-              {menu && (
-                <div className="text-xs space-y-1">
-                  {menu.recipe.imageUrl && (
-                    <img
-                      src={menu.recipe.imageUrl}
-                      alt={menu.recipe.name}
-                      className="w-full h-10 sm:h-12 md:h-16 object-cover rounded"
-                    />
-                  )}
-                  <div className="font-medium text-green-800 truncate text-[10px] sm:text-xs">
-                    {menu.recipe.name}
-                  </div>
-                </div>
+              {menu && menu.recipe.imageUrl && (
+                <img
+                  src={menu.recipe.imageUrl}
+                  alt={menu.recipe.name}
+                  className="w-full h-full max-h-[60px] sm:max-h-[80px] md:max-h-[100px] object-cover rounded"
+                />
               )}
             </button>
           )

@@ -8,7 +8,7 @@ export default function Home() {
           夕飯はこれ！
         </h1>
         <p className="text-sm sm:text-base md:text-lg text-gray-600 mb-8 px-4">
-          みが作れるものから夕飯を選択できるアプリ
+          私が作れるものから夕飯を選択できるアプリ
         </p>
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">

@@ -92,8 +92,8 @@ export default function WeekCalendar({
         </button>
       </div>
 
-      {/* 週間カレンダーグリッド */}
-      <div className="grid grid-cols-7 gap-1 sm:gap-2 md:gap-4">
+      {/* 週間カレンダーグリッド - 横長を縦に並べる */}
+      <div className="space-y-2">
         {weekDays.map((date, index) => {
           const menu = getMenuForDate(date)
           const today = isToday(date)
@@ -103,53 +103,57 @@ export default function WeekCalendar({
               key={index}
               onClick={() => onDateClick(date)}
               className={`
-                p-2 sm:p-3 md:p-4 border rounded-lg text-left min-h-[150px] sm:min-h-[180px] md:min-h-[200px]
+                w-full p-3 sm:p-4 border rounded-lg
                 hover:bg-blue-50 transition-colors touch-manipulation
                 ${today ? 'border-blue-500 border-2' : 'border-gray-300'}
                 ${menu ? 'bg-green-50' : ''}
               `}
             >
-              {/* 曜日と日付 */}
-              <div className="mb-2 sm:mb-3">
-                <div
-                  className={`text-[10px] sm:text-xs md:text-sm font-semibold ${
-                    index === 0
-                      ? 'text-red-600'
-                      : index === 6
-                      ? 'text-blue-600'
-                      : ''
-                  }`}
-                >
-                  {dayNames[index]}
+              <div className="flex items-center gap-3 sm:gap-4">
+                {/* 曜日と日付 */}
+                <div className="flex-shrink-0 w-16 sm:w-20 text-left">
+                  <div
+                    className={`text-xs sm:text-sm font-semibold ${
+                      index === 0
+                        ? 'text-red-600'
+                        : index === 6
+                        ? 'text-blue-600'
+                        : ''
+                    }`}
+                  >
+                    {dayNames[index]}
+                  </div>
+                  <div className="text-xl sm:text-2xl font-bold">{date.getDate()}</div>
+                  <div className="text-xs text-gray-500">
+                    {date.getMonth() + 1}月
+                  </div>
                 </div>
-                <div className="text-lg sm:text-xl md:text-2xl font-bold">{date.getDate()}</div>
-                <div className="text-[10px] sm:text-xs text-gray-500">
-                  {date.getMonth() + 1}月
-                </div>
-              </div>
 
-              {/* 献立情報 */}
-              {menu ? (
-                <div className="space-y-1 sm:space-y-2">
-                  {menu.recipe.imageUrl && (
-                    <img
-                      src={menu.recipe.imageUrl}
-                      alt={menu.recipe.name}
-                      className="w-full h-16 sm:h-20 md:h-24 object-cover rounded"
-                    />
-                  )}
-                  <div className="text-[10px] sm:text-xs md:text-sm font-medium text-green-800 line-clamp-2">
-                    {menu.recipe.name}
+                {/* 献立情報 */}
+                {menu ? (
+                  <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                    {menu.recipe.imageUrl && (
+                      <img
+                        src={menu.recipe.imageUrl}
+                        alt={menu.recipe.name}
+                        className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded flex-shrink-0"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0 text-left">
+                      <div className="text-sm sm:text-base font-medium text-green-800 mb-1 line-clamp-2">
+                        {menu.recipe.name}
+                      </div>
+                      <div className="text-xs sm:text-sm text-gray-600">
+                        {menu.recipe.category}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-[9px] sm:text-[10px] md:text-xs text-gray-600">
-                    {menu.recipe.category}
+                ) : (
+                  <div className="flex-1 text-sm text-gray-400 text-center">
+                    献立なし
                   </div>
-                </div>
-              ) : (
-                <div className="text-[10px] sm:text-xs md:text-sm text-gray-400 text-center mt-4 sm:mt-6 md:mt-8">
-                  献立なし
-                </div>
-              )}
+                )}
+              </div>
             </button>
           )
         })}

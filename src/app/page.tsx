@@ -5,10 +5,10 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 md:p-16 lg:p-24">
       <div className="text-center max-w-4xl mx-auto">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-          献立カレンダーアプリ
+          夕飯はこれ！
         </h1>
         <p className="text-sm sm:text-base md:text-lg text-gray-600 mb-8 px-4">
-          自分のレシピ集から献立をカレンダーで選択できるアプリケーション
+          みのレシピ集からメニューをカレンダーで選択できるアプリ
         </p>
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile } from 'fs/promises'
-import { join } from 'path'
+import { put } from '@vercel/blob'
 
 // 画像アップロード (POST /api/upload)
 export async function POST(request: NextRequest) {
@@ -34,22 +33,18 @@ export async function POST(request: NextRequest) {
     }
 
     // ファイル名を生成（タイムスタンプ + ランダム文字列 + 拡張子）
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
-
     const timestamp = Date.now()
     const randomString = Math.random().toString(36).substring(2, 15)
     const extension = file.name.split('.').pop()
-    const filename = `${timestamp}-${randomString}.${extension}`
+    const filename = `recipes/${timestamp}-${randomString}.${extension}`
 
-    // public/uploadsディレクトリに保存
-    const uploadDir = join(process.cwd(), 'public', 'uploads')
-    const filepath = join(uploadDir, filename)
-
-    await writeFile(filepath, buffer)
+    // Vercel Blobにアップロード
+    const blob = await put(filename, file, {
+      access: 'public',
+    })
 
     // 画像のURLを返す
-    const imageUrl = `/uploads/${filename}`
+    const imageUrl = blob.url
 
     return NextResponse.json({ imageUrl }, { status: 201 })
   } catch (error) {

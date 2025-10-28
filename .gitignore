@@ -48,3 +48,9 @@ data/
 
 # Uploads
 public/uploads/
+
+# PWA
+public/sw.js
+public/workbox-*.js
+public/sw.js.map
+public/workbox-*.js.map

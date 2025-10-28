@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "Recipe" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "category" TEXT NOT NULL,
     "ingredients" TEXT NOT NULL,
@@ -10,17 +10,20 @@ CREATE TABLE "Recipe" (
     "imageUrl" TEXT,
     "tags" TEXT,
     "memo" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Recipe_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Menu" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "recipeId" TEXT NOT NULL,
-    "date" DATETIME NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "Menu_recipeId_fkey" FOREIGN KEY ("recipeId") REFERENCES "Recipe" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    "date" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Menu_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -37,3 +40,6 @@ CREATE INDEX "Menu_recipeId_idx" ON "Menu"("recipeId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Menu_date_key" ON "Menu"("date");
+
+-- AddForeignKey
+ALTER TABLE "Menu" ADD CONSTRAINT "Menu_recipeId_fkey" FOREIGN KEY ("recipeId") REFERENCES "Recipe"("id") ON DELETE CASCADE ON UPDATE CASCADE;

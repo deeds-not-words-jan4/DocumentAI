@@ -51,10 +51,17 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
-    // バリデーション
-    if (!body.recipeId || !body.date) {
+    // バリデーション（レシピIDまたはメモのどちらかは必須）
+    if (!body.recipeId && !body.memo) {
       return NextResponse.json(
-        { error: '必須項目が入力されていません' },
+        { error: 'レシピまたはメモを入力してください' },
+        { status: 400 }
+      )
+    }
+
+    if (!body.date) {
+      return NextResponse.json(
+        { error: '日付は必須です' },
         { status: 400 }
       )
     }
@@ -77,8 +84,9 @@ export async function POST(request: NextRequest) {
 
     const menu = await prisma.menu.create({
       data: {
-        recipeId: body.recipeId,
+        recipeId: body.recipeId || null,
         date,
+        memo: body.memo || null,
       },
       include: {
         recipe: true,

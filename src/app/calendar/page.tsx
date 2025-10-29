@@ -99,7 +99,7 @@ export default function CalendarPage() {
     }
   }
 
-  const handleMenuSubmit = async (recipeId: string, date: Date) => {
+  const handleMenuSubmit = async (recipeId: string, date: Date, memo: string) => {
     try {
       const response = await fetch('/api/menus', {
         method: 'POST',
@@ -107,8 +107,9 @@ export default function CalendarPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          recipeId,
+          recipeId: recipeId || undefined,
           date: date.toISOString(),
+          memo: memo || undefined,
         }),
       })
 
@@ -125,7 +126,7 @@ export default function CalendarPage() {
     }
   }
 
-  const handleMenuEdit = async (menuId: string, recipeId: string, date: Date) => {
+  const handleMenuEdit = async (menuId: string, recipeId: string, date: Date, memo: string) => {
     try {
       const response = await fetch(`/api/menus/${menuId}`, {
         method: 'PUT',
@@ -133,8 +134,9 @@ export default function CalendarPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          recipeId,
+          recipeId: recipeId || undefined,
           date: date.toISOString(),
+          memo: memo || undefined,
         }),
       })
 
@@ -276,26 +278,39 @@ export default function CalendarPage() {
               </p>
 
               <div className="mb-4 sm:mb-6">
-                <h3 className="text-lg sm:text-xl font-semibold mb-2">
-                  {selectedMenu.recipe.name}
-                </h3>
-                <div className="flex gap-2 text-xs sm:text-sm text-gray-600 mb-4 flex-wrap">
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">
-                    {selectedMenu.recipe.category}
-                  </span>
-                  {selectedMenu.recipe.cookingTime && (
-                    <span>{selectedMenu.recipe.cookingTime}分</span>
-                  )}
-                  {selectedMenu.recipe.servings && (
-                    <span>{selectedMenu.recipe.servings}人分</span>
-                  )}
-                </div>
-                <Link
-                  href={`/recipes/${selectedMenu.recipe.id}`}
-                  className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm"
-                >
-                  レシピの詳細を見る →
-                </Link>
+                {selectedMenu.recipe ? (
+                  <>
+                    <h3 className="text-lg sm:text-xl font-semibold mb-2">
+                      {selectedMenu.recipe.name}
+                    </h3>
+                    <div className="flex gap-2 text-xs sm:text-sm text-gray-600 mb-4 flex-wrap">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                        {selectedMenu.recipe.category}
+                      </span>
+                      {selectedMenu.recipe.cookingTime && (
+                        <span>{selectedMenu.recipe.cookingTime}分</span>
+                      )}
+                      {selectedMenu.recipe.servings && (
+                        <span>{selectedMenu.recipe.servings}人分</span>
+                      )}
+                    </div>
+                    <Link
+                      href={`/recipes/${selectedMenu.recipe.id}`}
+                      className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm"
+                    >
+                      レシピの詳細を見る →
+                    </Link>
+                  </>
+                ) : (
+                  <p className="text-gray-500 text-sm sm:text-base">レシピが設定されていません</p>
+                )}
+
+                {selectedMenu.memo && (
+                  <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                    <h4 className="text-xs sm:text-sm font-semibold text-gray-700 mb-1">メモ</h4>
+                    <p className="text-xs sm:text-sm text-gray-700 whitespace-pre-wrap">{selectedMenu.memo}</p>
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-end">

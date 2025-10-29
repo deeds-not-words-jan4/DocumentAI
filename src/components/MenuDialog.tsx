@@ -8,7 +8,7 @@ type MenuDialogProps = {
   selectedDate: Date | null
   recipes: Recipe[]
   onClose: () => void
-  onSubmit: (recipeId: string, date: Date) => Promise<void>
+  onSubmit: (recipeId: string, date: Date, memo: string) => Promise<void>
 }
 
 export default function MenuDialog({
@@ -19,11 +19,13 @@ export default function MenuDialog({
   onSubmit,
 }: MenuDialogProps) {
   const [selectedRecipeId, setSelectedRecipeId] = useState<string>('')
+  const [memo, setMemo] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
       setSelectedRecipeId('')
+      setMemo('')
     }
   }, [isOpen])
 
@@ -31,11 +33,11 @@ export default function MenuDialog({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!selectedRecipeId) return
+    if (!selectedRecipeId && !memo) return
 
     setIsSubmitting(true)
     try {
-      await onSubmit(selectedRecipeId, selectedDate)
+      await onSubmit(selectedRecipeId, selectedDate, memo)
       onClose()
     } finally {
       setIsSubmitting(false)
@@ -107,6 +109,21 @@ export default function MenuDialog({
             )}
           </div>
 
+          {/* メモ入力 */}
+          <div className="mb-4 sm:mb-6">
+            <label htmlFor="memo" className="block text-xs sm:text-sm font-medium mb-2">
+              メモ
+            </label>
+            <textarea
+              id="memo"
+              value={memo}
+              onChange={(e) => setMemo(e.target.value)}
+              placeholder="買い物メモや調理のポイントなど"
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+            />
+          </div>
+
           <div className="flex gap-2 sm:gap-4 justify-end">
             <button
               type="button"
@@ -119,7 +136,7 @@ export default function MenuDialog({
             <button
               type="submit"
               className="flex-1 sm:flex-none px-4 sm:px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 text-sm sm:text-base touch-manipulation"
-              disabled={isSubmitting || !selectedRecipeId}
+              disabled={isSubmitting || (!selectedRecipeId && !memo)}
             >
               {isSubmitting ? '登録中...' : '登録'}
             </button>

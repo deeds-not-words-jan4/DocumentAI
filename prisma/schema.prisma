@@ -35,12 +35,13 @@ model Recipe {
 // 献立テーブル
 model Menu {
   id        String   @id @default(cuid())
-  recipeId  String   // レシピID（外部キー）
+  recipeId  String?  // レシピID（外部キー、オプション）
   date      DateTime // 献立の日付
+  memo      String?  // メモ
   createdAt DateTime @default(now())
 
   // リレーション
-  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipe    Recipe?  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
   @@index([date])
   @@index([recipeId])

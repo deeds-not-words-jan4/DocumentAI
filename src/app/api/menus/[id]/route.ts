@@ -40,7 +40,7 @@ export async function PUT(
     const body = await request.json()
 
     // バリデーション
-    if (!body.recipeId && !body.date) {
+    if (!body.recipeId && !body.date && body.memo === undefined) {
       return NextResponse.json(
         { error: '更新する項目を指定してください' },
         { status: 400 }
@@ -49,14 +49,18 @@ export async function PUT(
 
     const updateData: any = {}
 
-    if (body.recipeId) {
-      updateData.recipeId = body.recipeId
+    if (body.recipeId !== undefined) {
+      updateData.recipeId = body.recipeId || null
     }
 
     if (body.date) {
       const date = new Date(body.date)
       date.setHours(0, 0, 0, 0)
       updateData.date = date
+    }
+
+    if (body.memo !== undefined) {
+      updateData.memo = body.memo || null
     }
 
     const menu = await prisma.menu.update({

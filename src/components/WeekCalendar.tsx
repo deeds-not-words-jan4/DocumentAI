@@ -131,22 +131,42 @@ export default function WeekCalendar({
 
                 {/* 献立情報 */}
                 {menu ? (
-                  <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                    {menu.recipe.imageUrl && (
+                  <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+                    {/* 画像 - 左 */}
+                    {menu.recipe && menu.recipe.imageUrl && (
                       <img
                         src={menu.recipe.imageUrl}
                         alt={menu.recipe.name}
                         className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded flex-shrink-0"
                       />
                     )}
-                    <div className="flex-1 min-w-0 text-left">
-                      <div className="text-sm sm:text-base font-medium text-green-800 mb-1 line-clamp-2">
-                        {menu.recipe.name}
-                      </div>
-                      <div className="text-xs sm:text-sm text-gray-600">
-                        {menu.recipe.category}
-                      </div>
+
+                    {/* レシピ名とカテゴリ - 中央左 */}
+                    <div className="flex-shrink-0 text-left" style={{ width: '200px' }}>
+                      {menu.recipe ? (
+                        <>
+                          <div className="text-sm sm:text-base font-medium text-green-800 mb-1 line-clamp-2">
+                            {menu.recipe.name}
+                          </div>
+                          <div className="text-xs sm:text-sm text-gray-600">
+                            {menu.recipe.category}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="text-sm sm:text-base font-medium text-gray-600">
+                          レシピなし
+                        </div>
+                      )}
                     </div>
+
+                    {/* メモ - 右側の空いたスペース */}
+                    {menu.memo && (
+                      <div className="flex-1 min-w-0 text-left">
+                        <div className="text-lg sm:text-xl md:text-2xl text-gray-700 line-clamp-3">
+                          {menu.memo}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="flex-1 text-sm text-gray-400 text-center">

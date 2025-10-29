@@ -145,7 +145,7 @@ export default function MonthCalendar({
               >
                 {date.getDate()}
               </div>
-              {menu && menu.recipe.imageUrl && (
+              {menu && menu.recipe && menu.recipe.imageUrl && (
                 <img
                   src={menu.recipe.imageUrl}
                   alt={menu.recipe.name}
